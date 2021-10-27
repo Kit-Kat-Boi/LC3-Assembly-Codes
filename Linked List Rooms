@@ -1,0 +1,167 @@
+;This code contains two linked list. One called "main room" and the other "waiting room".
+;this code is similar to the Linked list file but this time it checks both list.
+;when a match is found in the main room, the display outputs that the student is already in the room.
+;when there is a match in the waiting room, the display outputs that the student is added to the main room.
+:if neither cases happen, then the output is that the EID doesn't match.
+
+        .ORIG x3000
+    ; Prompts user to type their EID
+    
+        LEA R0, Prompt
+        PUTS
+        
+    ; Read and store user's EID
+    
+        LEA R1, Type
+        LD R2, Enter
+Loop1   GETC
+        OUT
+        ADD R3, R2, R0
+        BRZ Next
+        STR R0, R1, #0
+        ADD R1, R1, #1
+        BR Loop1
+Next    AND R4, R4, #0
+        STR R4, R1, #0
+        
+    ; Searched link list for match in main room
+    
+        LDI R0, HeadPTR
+       
+B       ADD R1, R0, R4
+        BRNP Compare
+        
+    ;Checks waiting room
+    
+        LDI R0, HeadPTR2
+        LD R3, HeadPTR2
+        
+   
+C       ADD R1, R0, R4
+        BRNP Compare2
+        
+        ;No more nodes to check
+        
+        LEA R0, Msg3
+        PUTS
+        BR Done
+        
+Compare 
+        LDR R1, R0, #1
+        LEA R2, Type
+        JSR MATCH
+        ADD R4, R4, #0
+        BRP already
+        LDR R0, R0, #0
+        BR B
+        
+Compare2 
+        LDR R1, R0, #1
+        LEA R2, Type
+        JSR MATCH2
+        ADD R4, R4, #0
+        BRP DI
+        LDR R0, R0, #0
+        LDR R3, R3, #0
+        BR C
+    
+        ;EID already in main room
+    
+already LEA R0, Type
+        PUTS
+        LEA R0, Msg2
+        PUTS
+        BR Done
+        
+        
+DI      
+    ;Deletes from waiting room
+        AND R4, R4, #0
+        ADD R1, R3, #0
+        LDR R2, R3, #0
+        BRZ skip
+        LDR R4, R2, #0
+skip    STR R4, R1, #0
+    ;Inserts to main room    
+        ADD R2, R2, #0
+        LDI R0, HeadPTR
+        STR R0, R2, #0
+        LD R0, HeadPTR
+        STR R2, R0, #0
+        
+        LEA R0, Type
+        PUTS
+        LEA R0, Msg
+        PUTS
+        
+Done    HALT
+    
+MATCH   
+        ST R7, Save
+    A   LDR R5, R1, #0
+        LDR R6, R2, #0
+        ADD R6, R6, #0
+        BRZ yes
+        NOT R6, R6
+        ADD R6, R6, #1
+        ADD R5, R5, R6
+        ADD R5, R5, #0
+        BRNP no
+        ADD R1, R1, #1
+        ADD R2, R2, #1
+        BR A
+        
+    yes AND R4, R4, #0
+        ADD R4, R4, #1
+        BR back
+        
+    no  AND R4, R4, #0
+        BR back
+        
+    back
+        AND R5, R5, #0
+        AND R5, R6, #0
+        LD R7, Save
+        JMP R7
+    
+MATCH2
+        ST R7, Save
+    Z   LDR R5, R1, #0
+        LDR R6, R2, #0
+        ADD R6, R6, #0
+        BRZ Ye
+        NOT R6, R6
+        ADD R6, R6, #1
+        ADD R5, R5, R6
+        ADD R5, R5, #0
+        BRNP na
+        ADD R1, R1, #1
+        ADD R2, R2, #1
+        BR Z
+        
+    Ye  
+        AND R4, R4, #0
+        ADD R4, R4, #1
+        BR bak
+        
+    na  AND R4, R4, #0
+        BR bak
+        
+    bak
+        AND R5, R5, #0
+        AND R5, R6, #0
+        LD R7, Save
+        JMP R7
+    
+Type        .BLKW x6
+Enter       .FILL x-0A
+HeadPTR     .FILL x4000
+HeadPTR2    .FIll x4001
+Save        .BLKW #1
+Prompt      .STRINGZ "Type EID and press Enter: "
+Msg         .STRINGZ " is added to the main room."
+Msg2        .STRINGZ " is already in the main room."
+Msg3        .STRINGZ "The entered EID does not match"
+
+
+        .END
