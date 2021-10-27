@@ -1,3 +1,1 @@
-# Finding-Sum-and-Difference
-Calculates sum and difference of two 8-bit unsigned numbers and sends it back into memory.
-Code in LC3 Assembly.
+This repositatory contains multiple projects of Assembly code I have created.
