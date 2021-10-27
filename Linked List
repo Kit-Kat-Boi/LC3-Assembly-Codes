@@ -1,3 +1,5 @@
+;This code creates a user interface to see if a student is "in the room" with a linked list.
+;First prompts a user to type an EID and then searches through the linked list to see if the student is present or not.
         .ORIG x3000
     ; Prompts user to type their EID
     
