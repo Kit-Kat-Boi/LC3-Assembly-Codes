@@ -1,3 +1,5 @@
+;This code takes two 8-bit unsigned integers and calculates the sum and difference.
+;Then stores the results back into memory.
     .ORIG x3000
     
     ;Identifies 8 bit unsign and mask out bits [15:8]
