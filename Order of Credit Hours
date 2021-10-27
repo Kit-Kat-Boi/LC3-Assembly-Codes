@@ -1,3 +1,5 @@
+;This code identifies student ID numbers in bits [15:8] and their corresponding credit hours in bits [7:0].
+;Then orders them from least to greatest.
     .ORIG x3000
         
         LD R0, A
