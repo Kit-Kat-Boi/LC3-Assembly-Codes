@@ -1,4 +1,6 @@
-        .ORIG x3000
+;This code takes three 8-bit unsigned integers in a memory loaction that is stored in the memory loaction 0x4000 in successive loactions.
+;Then compares each number and stores them from greatest to least.
+    .ORIG x3000
 
 ;Identifies Starting Address of the Three Numbers
     LD R0, START
