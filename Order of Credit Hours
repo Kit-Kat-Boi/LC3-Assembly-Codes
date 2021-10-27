@@ -1,0 +1,66 @@
+    .ORIG x3000
+        
+        LD R0, A
+
+        LD R1, B
+
+    
+KEEP    LD R7, MASK
+        LDR R2, R0, #0
+        AND R2, R2, R7
+        BRZ NULL
+        
+GOON    LD R7, MASK
+        LDR R3, R1, #0
+        AND R3, R3, R7
+        BRNP GO
+        ADD R1, R0, #1
+        ADD R0, R0, #1
+        BR KEEP
+        
+GO      JSR COMPARE
+        ADD R4, R4, #0
+        BRNZ REPEAT
+        LDR R2, R1, #0
+        LDR R3, R0, #0
+        STR R2, R0, #0
+        STR R3, R1, #0
+        
+        
+REPEAT  ADD R1, R1, #1
+        BR GOON
+    
+NULL    HALT
+    
+A       .FILL x4004
+B       .FILL x4005
+MASK    .FILL xFF00
+HIDE    .FILL x00FF
+
+    
+    
+COMPARE
+        ST R7, SAVE
+        LD R4, HIDE
+        LDR R2, R0, #0
+        LDR R3, R1, #0
+        AND R5, R2, R4
+        AND R6, R3, R4
+        NOT R6, R6
+        ADD R6, R6, #1
+        ADD R5, R5, R6
+        BRP SWAP
+        AND R4, R4, #0
+        LD R7, SAVE
+        JMP R7
+SWAP    
+        AND R4, R4, #0
+        ADD R4, R4, #1
+        LD R7, SAVE
+        JMP R7
+
+SAVE .BLKW #1
+
+    .END
+    
+    
