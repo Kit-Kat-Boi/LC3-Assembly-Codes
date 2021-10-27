@@ -1,5 +1,6 @@
 # Finding-Sum-and-Difference-
 Calculates sum and difference of two 8-bit unsigned numbers and sends it back into memory.
+    
     .ORIG x3000
     
     ;Identifies 8 bit unsign and mask out bits [15:8]
