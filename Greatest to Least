@@ -1,0 +1,68 @@
+        .ORIG x3000
+
+;Identifies Starting Address of the Three Numbers
+    LD R0, START
+    LDR R0, R0, #0
+    
+;Loads Three Successive Memory Locations and Clears Bits [15:8]
+    LD R7, CLEAR
+
+    LDR R1, R0, #0
+    LDR R2, R0, #1
+    LDR R3, R0, #2
+    
+    AND R1, R1, R7
+    AND R2, R2, R7
+    AND R3, R3, R7
+    
+; Order
+    NOT R4,R2,
+    ADD R4,R4, #1
+    ADD R6, R1, R4
+    BRP r1Larger
+    ADD R5, R3, R4
+    BRP r3Larger
+    STR R2, R0, #3
+    BR SMALL
+    
+r1Larger NOT R4, R3
+    ADD R4, R4, #1
+    ADD R5, R1, R4
+    BRP R1Largest
+    STR R3, R0, #3
+    BR SMALL
+    
+R1Largest STR R1, R0, #3
+    BR SMALL
+
+r3Larger STR R3, R0, #3
+    BR SMALL
+    
+SMALL NOT R4,R2,
+    ADD R4,R4, #1
+    ADD R6, R1, R4
+    BRN r1smaller
+    ADD R5, R3, R4
+    BRP R2smallest
+    STR R3, R0, #4
+    BR FINAL
+    
+r1smaller NOT R4, R3
+    ADD R4, R4, #1
+    ADD R5, R1, R4
+    BRN R1smallest
+    STR R3, R0, #4
+    BR FINAL
+    
+R1smallest STR R1, R0, #4
+    BR FINAL
+
+R2smallest STR R2, R0, #4
+    BR FINAL
+
+    
+FINAL HALT
+
+START .FILL x4000
+CLEAR .FILL x00FF
+    .END
